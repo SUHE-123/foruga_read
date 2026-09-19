@@ -41,6 +41,13 @@ jobs:
       - name: Build iOS
         run: flutter build ipa --release --no-codesign
 
+      - name: Create unsigned IPA
+        run: |
+          mkdir -p build/ios/unsigned_ipa/Payload
+          cp -R build/ios/archive/Runner.xcarchive/Products/Applications/Runner.app build/ios/unsigned_ipa/Payload/
+          cd build/ios/unsigned_ipa
+          zip -r ../FORUGA_READ_unsigned.ipa Payload
+
       - name: Upload iOS build
         uses: actions/upload-artifact@v4
         with:
@@ -48,4 +55,5 @@ jobs:
           path: |
             build/ios/ipa/*.ipa
             build/ios/archive/*.xcarchive
+            build/ios/FORUGA_READ_unsigned.ipa
           if-no-files-found: warn
